@@ -11,8 +11,6 @@ const Home = () => {
   const [category, setCategory] = useState("All");
   const { food_list, url } = useContext(StoreContext);
   const [featuredItems, setFeaturedItems] = useState([]);
-  console.log(featuredItems);
-
 
   useEffect(() => {
     // Get 3 random items for featured section
@@ -124,7 +122,7 @@ const Home = () => {
                 className="relative"
               >
                 <img
-                  src="https://quantrinhahang.edu.vn/wp-content/uploads/2019/06/fast-food-la-gi.jpg"
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-WPAzG1Ep5GMy6j4QCv3QPeyrxDUyuA.png"
                   alt="Người giao hàng"
                   className="w-full max-w-md mx-auto"
                 />

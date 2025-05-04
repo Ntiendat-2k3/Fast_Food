@@ -1,73 +1,65 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { ArrowRight, Star, Clock, Truck, ShoppingBag } from "lucide-react";
-import { motion } from "framer-motion";
-import { StoreContext } from "../../context/StoreContext";
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { useContext } from "react"
+import { StoreContext } from "../../context/StoreContext"
+import { ArrowRight, Star, Clock, Truck, ShoppingBag } from "lucide-react"
+import { motion } from "framer-motion"
 
 const Home = () => {
-  const [category, setCategory] = useState("All");
-  const { food_list, url } = useContext(StoreContext);
-  const [featuredItems, setFeaturedItems] = useState([]);
-  console.log(featuredItems);
-
+  const [category, setCategory] = useState("All")
+  const { food_list, url } = useContext(StoreContext)
+  const [featuredItems, setFeaturedItems] = useState([])
 
   useEffect(() => {
     // Get 3 random items for featured section
     if (food_list.length > 0) {
-      const shuffled = [...food_list].sort(() => 0.5 - Math.random());
-      setFeaturedItems(shuffled.slice(0, 3));
+      const shuffled = [...food_list].sort(() => 0.5 - Math.random())
+      setFeaturedItems(shuffled.slice(0, 3))
     }
-  }, [food_list]);
+  }, [food_list])
 
   // Testimonials data
   const testimonials = [
     {
       name: "Nguyễn Thị Hương",
       role: "Khách hàng thường xuyên",
-      comment:
-        "Chất lượng thức ăn và tốc độ giao hàng rất tuyệt vời. Đây là dịch vụ giao đồ ăn yêu thích của tôi!",
+      comment: "Chất lượng thức ăn và tốc độ giao hàng rất tuyệt vời. Đây là dịch vụ giao đồ ăn yêu thích của tôi!",
       image: "https://randomuser.me/api/portraits/women/44.jpg",
     },
     {
       name: "Trần Minh Tuấn",
       role: "Người yêu ẩm thực",
-      comment:
-        "Tôi thích sự đa dạng của các món ăn. Mọi thứ tôi đã thử đều ngon và tươi.",
+      comment: "Tôi thích sự đa dạng của các món ăn. Mọi thứ tôi đã thử đều ngon và tươi.",
       image: "https://randomuser.me/api/portraits/men/32.jpg",
     },
     {
       name: "Lê Thị Mai",
       role: "Doanh nhân bận rộn",
-      comment:
-        "Giao hàng nhanh và thức ăn luôn nóng hổi. Hoàn hảo cho lịch trình bận rộn của tôi!",
+      comment: "Giao hàng nhanh và thức ăn luôn nóng hổi. Hoàn hảo cho lịch trình bận rộn của tôi!",
       image: "https://randomuser.me/api/portraits/women/68.jpg",
     },
-  ];
+  ]
 
   // Services data
   const services = [
     {
       title: "Giao hàng nhanh",
-      description:
-        "Chúng tôi giao đồ ăn trong vòng 30 phút trong khu vực của bạn.",
+      description: "Chúng tôi giao đồ ăn trong vòng 30 phút trong khu vực của bạn.",
       icon: <Truck className="h-8 w-8 text-dark dark:text-white" />,
     },
     {
       title: "Đặt hàng dễ dàng",
-      description:
-        "Đặt đồ ăn chỉ với vài cú nhấp chuột và thanh toán trực tuyến an toàn.",
+      description: "Đặt đồ ăn chỉ với vài cú nhấp chuột và thanh toán trực tuyến an toàn.",
       icon: <ShoppingBag className="h-8 w-8 text-dark dark:text-white" />,
     },
     {
       title: "Phục vụ 24/7",
-      description:
-        "Dịch vụ khách hàng của chúng tôi hoạt động 24/7 để hỗ trợ bạn.",
+      description: "Dịch vụ khách hàng của chúng tôi hoạt động 24/7 để hỗ trợ bạn.",
       icon: <Clock className="h-8 w-8 text-dark dark:text-white" />,
     },
-  ];
+  ]
 
   return (
     <div className="pt-20">
@@ -85,20 +77,15 @@ const Home = () => {
         <div className="container mx-auto px-4 md:px-8 py-16 md:py-24 relative z-10">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-10 md:mb-0">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
                 <h1 className="text-4xl md:text-6xl font-bold mb-4">
                   <span className="text-white">Bạn đang</span>
                   <br />
                   <span className="text-primary">đói ?</span>
                 </h1>
                 <p className="text-white/80 text-lg mb-8 max-w-md">
-                  Bạn có thể đặt hàng tại đây rất dễ dàng và đơn giản. Chỉ cần
-                  vài cú nhấp chuột và bữa ăn ngon của bạn sẽ được giao đến tận
-                  nơi!
+                  Bạn có thể đặt hàng tại đây rất dễ dàng và đơn giản. Chỉ cần vài cú nhấp chuột và bữa ăn ngon của bạn
+                  sẽ được giao đến tận nơi!
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Link
@@ -124,7 +111,7 @@ const Home = () => {
                 className="relative"
               >
                 <img
-                  src="https://quantrinhahang.edu.vn/wp-content/uploads/2019/06/fast-food-la-gi.jpg"
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-WPAzG1Ep5GMy6j4QCv3QPeyrxDUyuA.png"
                   alt="Người giao hàng"
                   className="w-full max-w-md mx-auto"
                 />
@@ -135,9 +122,7 @@ const Home = () => {
                     </div>
                     <div>
                       <p className="text-dark font-bold">Giao hàng nhanh</p>
-                      <p className="text-dark/70 text-sm">
-                        30 phút hoặc miễn phí
-                      </p>
+                      <p className="text-dark/70 text-sm">30 phút hoặc miễn phí</p>
                     </div>
                   </div>
                 </div>
@@ -181,21 +166,15 @@ const Home = () => {
                 </div>
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold text-dark dark:text-white">
-                      {item.name}
-                    </h3>
+                    <h3 className="text-xl font-bold text-dark dark:text-white">{item.name}</h3>
                     <div className="flex items-center bg-primary-light px-2 py-1 rounded-full">
                       <Star className="h-4 w-4 text-primary fill-primary mr-1" />
                       <span className="text-sm font-medium">4.8</span>
                     </div>
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">
-                    {item.description}
-                  </p>
+                  <p className="text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">{item.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-xl font-bold text-primary">
-                      {item.price.toLocaleString("vi-VN")} đ
-                    </span>
+                    <span className="text-xl font-bold text-primary">{item.price.toLocaleString("vi-VN")} đ</span>
                     <Link
                       to={`/food/${item._id}`}
                       className="bg-primary hover:bg-primary-dark text-dark font-medium py-2 px-4 rounded-full transition-colors text-sm"
@@ -222,8 +201,8 @@ const Home = () => {
                 <span className="text-primary">Ưu đãi bất ngờ</span>
               </h3>
               <p className="text-white/80 mb-6">
-                Thưởng thức món ăn đặc biệt của chúng tôi với giá ưu đãi. Chỉ áp
-                dụng trong hôm nay, đừng bỏ lỡ cơ hội này!
+                Thưởng thức món ăn đặc biệt của chúng tôi với giá ưu đãi. Chỉ áp dụng trong hôm nay, đừng bỏ lỡ cơ hội
+                này!
               </p>
               <div className="mb-6">
                 <span className="text-primary text-5xl font-bold">45.000đ</span>
@@ -260,8 +239,7 @@ const Home = () => {
               <span className="text-primary">hài lòng của chúng tôi</span>
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              Hãy xem khách hàng nói gì về trải nghiệm với dịch vụ giao đồ ăn
-              của chúng tôi.
+              Hãy xem khách hàng nói gì về trải nghiệm với dịch vụ giao đồ ăn của chúng tôi.
             </p>
           </div>
 
@@ -281,23 +259,14 @@ const Home = () => {
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
-                    <h4 className="font-bold text-dark dark:text-white">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">
-                      {testimonial.role}
-                    </p>
+                    <h4 className="font-bold text-dark dark:text-white">{testimonial.name}</h4>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">{testimonial.role}</p>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300">
-                  {testimonial.comment}
-                </p>
+                <p className="text-gray-600 dark:text-gray-300">{testimonial.comment}</p>
                 <div className="flex mt-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-5 w-5 text-primary fill-primary"
-                    />
+                    <Star key={i} className="h-5 w-5 text-primary fill-primary" />
                   ))}
                 </div>
               </motion.div>
@@ -315,8 +284,7 @@ const Home = () => {
               <span className="text-primary">của chúng tôi</span>
             </h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              Chúng tôi cung cấp dịch vụ tốt nhất để đảm bảo thức ăn của bạn đến
-              tươi ngon và đúng giờ.
+              Chúng tôi cung cấp dịch vụ tốt nhất để đảm bảo thức ăn của bạn đến tươi ngon và đúng giờ.
             </p>
           </div>
 
@@ -332,12 +300,8 @@ const Home = () => {
                 <div className="bg-primary-light rounded-full w-16 h-16 flex items-center justify-center mb-6">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-bold text-dark dark:text-white mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  {service.description}
-                </p>
+                <h3 className="text-xl font-bold text-dark dark:text-white mb-3">{service.title}</h3>
+                <p className="text-gray-500 dark:text-gray-400">{service.description}</p>
               </motion.div>
             ))}
           </div>
@@ -345,10 +309,7 @@ const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <section
-        id="contact"
-        className="py-16 bg-white dark:bg-dark transition-colors duration-300"
-      >
+      <section id="contact" className="py-16 bg-white dark:bg-dark transition-colors duration-300">
         <div className="container mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-10 md:mb-0">
@@ -357,9 +318,8 @@ const Home = () => {
                 <span className="text-primary">với chúng tôi</span>
               </h2>
               <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md">
-                Bạn có câu hỏi hoặc phản hồi? Chúng tôi rất muốn nghe từ bạn.
-                Điền vào biểu mẫu và chúng tôi sẽ liên hệ lại với bạn sớm nhất
-                có thể.
+                Bạn có câu hỏi hoặc phản hồi? Chúng tôi rất muốn nghe từ bạn. Điền vào biểu mẫu và chúng tôi sẽ liên hệ
+                lại với bạn sớm nhất có thể.
               </p>
               <form className="space-y-4 max-w-md">
                 <div>
@@ -402,7 +362,7 @@ const Home = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
