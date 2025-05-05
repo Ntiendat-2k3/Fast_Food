@@ -28,9 +28,9 @@ const PlaceOrder = () => {
     event.preventDefault()
     const orderItems = []
     food_list.map((item) => {
-      if (cartItems[item._id] > 0) {
+      if (cartItems[item.name] > 0) {
         const itemInfo = item
-        itemInfo["quantity"] = cartItems[item._id]
+        itemInfo["quantity"] = cartItems[item.name]
         orderItems.push(itemInfo)
       }
     })
@@ -130,7 +130,7 @@ const PlaceOrder = () => {
             <div className="bg-gray-50 dark:bg-dark-light rounded-xl p-6">
               <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
                 {food_list.map((item, index) => {
-                  if (cartItems[item._id] > 0) {
+                  if (cartItems[item.name] > 0) {
                     return (
                       <div key={index} className="flex items-center justify-between">
                         <div className="flex items-center">
@@ -142,12 +142,12 @@ const PlaceOrder = () => {
                           <div>
                             <p className="text-dark dark:text-white">{item.name}</p>
                             <p className="text-gray-500 dark:text-gray-400 text-sm">
-                              {item.price.toLocaleString("vi-VN")} đ x {cartItems[item._id]}
+                              {item.price.toLocaleString("vi-VN")} đ x {cartItems[item.name]}
                             </p>
                           </div>
                         </div>
                         <p className="text-dark dark:text-white font-medium">
-                          {(item.price * cartItems[item._id]).toLocaleString("vi-VN")} đ
+                          {(item.price * cartItems[item.name]).toLocaleString("vi-VN")} đ
                         </p>
                       </div>
                     )

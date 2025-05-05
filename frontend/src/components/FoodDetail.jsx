@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { StoreContext } from "../context/StoreContext"
+import { StoreContext } from "../../context/StoreContext"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { ShoppingCart, Minus, Plus, CreditCard } from "lucide-react"
@@ -21,20 +21,24 @@ const FoodDetail = () => {
   const [quantity, setQuantity] = useState(1)
 
   const handleAddToCart = () => {
-    addToCart(id, quantity)
-    toast.success("Đã thêm vào giỏ hàng", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    })
+    if (foodItem) {
+      addToCart(foodItem.name, quantity)
+      toast.success("Đã thêm vào giỏ hàng", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+    }
   }
 
   const handlePayment = () => {
-    addToCart(id, quantity)
-    navigate("/order")
+    if (foodItem) {
+      addToCart(foodItem.name, quantity)
+      navigate("/order")
+    }
   }
 
   const increaseQuantity = () => {

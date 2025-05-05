@@ -6,6 +6,8 @@ import { useContext } from "react";
 import { ArrowRight, Star, Clock, Truck, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
 import { StoreContext } from "../../context/StoreContext";
+import { slugify } from "../../utils/slugify";
+
 
 const Home = () => {
   const [category, setCategory] = useState("All");
@@ -91,9 +93,9 @@ const Home = () => {
                 transition={{ duration: 0.6 }}
               >
                 <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                  <span className="text-white">Bạn đang</span>
+                  <span className="text-white">Are you</span>
                   <br />
-                  <span className="text-primary">đói ?</span>
+                  <span className="text-primary">hungry?</span>
                 </h1>
                 <p className="text-white/80 text-lg mb-8 max-w-md">
                   Bạn có thể đặt hàng tại đây rất dễ dàng và đơn giản. Chỉ cần
@@ -166,11 +168,11 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredItems.map((item, index) => (
               <motion.div
-                key={item._id}
+                key={item.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-white dark:bg-dark-light rounded-2xl overflow-hidden shadow-custom hover:shadow-hover transition-shadow border border-gray-100 dark:border-dark-lighter"
+                className="bg-white dark:bg-dark-light rounded-2xl overflow-hidden shadow-custom hover:shadow-hover transition-shadow border border-gray-100 dark:border-dark-lighter cursor-pointer"
               >
                 <div className="h-48 overflow-hidden">
                   <img
@@ -197,7 +199,7 @@ const Home = () => {
                       {item.price.toLocaleString("vi-VN")} đ
                     </span>
                     <Link
-                      to={`/food/${item._id}`}
+                      to={`/product/${slugify(item.name)}`}
                       className="bg-primary hover:bg-primary-dark text-dark font-medium py-2 px-4 rounded-full transition-colors text-sm"
                     >
                       Đặt ngay

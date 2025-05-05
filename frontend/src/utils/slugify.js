@@ -25,21 +25,22 @@ export function slugify(text) {
 }
 
 /**
- * Tạo slug từ tên sản phẩm và ID
- * @param {string} name - Tên sản phẩm
- * @param {string} id - ID sản phẩm
- * @returns {string} - Slug URL
+ * Trích xuất tên sản phẩm từ slug
+ * @param {string} slug - Slug URL
+ * @returns {string} - Tên sản phẩm đã được chuẩn hóa
  */
-export function createProductSlug(name) {
-  return `${slugify(name)}`
+export function extractNameFromSlug(slug) {
+  // Chuyển đổi slug thành tên sản phẩm có thể so sánh
+  return slug.replace(/-/g, " ")
 }
 
 /**
- * Trích xuất ID từ slug
+ * So sánh tên sản phẩm với slug
+ * @param {string} productName - Tên sản phẩm
  * @param {string} slug - Slug URL
- * @returns {string} - ID sản phẩm
+ * @returns {boolean} - Kết quả so sánh
  */
-export function extractIdFromSlug(slug) {
-  const parts = slug.split("-")
-  return parts[parts.length - 1]
+export function compareNameWithSlug(productName, slug) {
+  const normalizedName = slugify(productName)
+  return normalizedName === slug
 }

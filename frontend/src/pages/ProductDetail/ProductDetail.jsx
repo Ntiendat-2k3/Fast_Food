@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { StoreContext } from "../../context/StoreContext"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { extractIdFromSlug } from "../../utils/slugify"
+import { compareNameWithSlug } from "../../utils/slugify"
 import {
   ShoppingCart,
   Minus,
@@ -27,8 +27,6 @@ import { slugify } from "../../utils/slugify"
 
 const ProductDetail = () => {
   const { slug } = useParams()
-  const productId = extractIdFromSlug(slug)
-
   const { cartItems, addToCart, url } = useContext(StoreContext)
   const { food_list } = useContext(StoreContext)
   const navigate = useNavigate()
@@ -39,7 +37,8 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState([])
   const [isInWishlist, setIsInWishlist] = useState(false)
 
-  const foodItem = food_list.find((item) => item._id === productId)
+  // Tìm sản phẩm dựa trên slug (từ tên sản phẩm)
+  const foodItem = food_list.find((item) => compareNameWithSlug(item.name, slug))
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -47,27 +46,31 @@ const ProductDetail = () => {
     // Nếu tìm thấy sản phẩm, tìm các sản phẩm liên quan
     if (foodItem) {
       const related = food_list
-        .filter((item) => item.category === foodItem.category && item._id !== foodItem._id)
+        .filter((item) => item.category === foodItem.category && item.name !== foodItem.name)
         .slice(0, 4)
       setRelatedProducts(related)
     }
-  }, [foodItem, food_list, productId])
+  }, [foodItem, food_list, slug])
 
   const handleAddToCart = () => {
-    addToCart(productId, quantity)
-    toast.success("Đã thêm vào giỏ hàng", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    })
+    if (foodItem) {
+      addToCart(foodItem.name, quantity) // Sử dụng name thay vì ID
+      toast.success("Đã thêm vào giỏ hàng", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+    }
   }
 
   const handleBuyNow = () => {
-    addToCart(productId, quantity)
-    navigate("/order")
+    if (foodItem) {
+      addToCart(foodItem.name, quantity) // Sử dụng name thay vì ID
+      navigate("/order")
+    }
   }
 
   const increaseQuantity = () => {
@@ -522,9 +525,9 @@ const ProductDetail = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((item, index) => (
                 <div
-                  key={item._id}
+                  key={item.name}
                   className="bg-white dark:bg-dark-light rounded-2xl overflow-hidden shadow-custom hover:shadow-hover transition-all hover:-translate-y-1 border border-gray-100 dark:border-dark-lighter"
-                  onClick={() => navigate(`/product/${slugify(item.name)}-${item._id}`)}
+                  onClick={() => navigate(`/product/${slugify(item.name)}`)}
                 >
                   <div className="relative h-48 overflow-hidden">
                     <img
@@ -547,7 +550,7 @@ const ProductDetail = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          addToCart(item._id, 1)
+                          addToCart(item.name, 1)
                           toast.success("Đã thêm vào giỏ hàng", { autoClose: 2000 })
                         }}
                         className="bg-primary hover:bg-primary-dark text-dark p-2 rounded-full transition-colors"

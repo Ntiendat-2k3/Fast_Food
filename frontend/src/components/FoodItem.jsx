@@ -5,20 +5,19 @@ import { StoreContext } from "../context/StoreContext"
 import { useNavigate } from "react-router-dom"
 import { ShoppingCart, Star } from "lucide-react"
 import { motion } from "framer-motion"
-import { createProductSlug } from "../utils/slugify"
+import { slugify } from "../utils/slugify"
 
-function FoodItem({ id, name, price, description, image, index }) {
+function FoodItem({ name, price, description, image, index }) {
   const { url, addToCart } = useContext(StoreContext)
   const navigate = useNavigate()
 
   const handleClick = () => {
-    // Sử dụng slug URL thay vì chỉ ID
-    navigate(`/product/${createProductSlug(name)}`)
+    navigate(`/product/${slugify(name)}`)
   }
 
   const handleAddToCart = (e) => {
     e.stopPropagation()
-    addToCart(id, 1)
+    addToCart(name, 1)
   }
 
   return (
@@ -50,6 +49,8 @@ function FoodItem({ id, name, price, description, image, index }) {
           <button
             onClick={handleAddToCart}
             className="bg-primary hover:bg-primary-dark text-dark p-2 rounded-full transition-colors"
+            type="button"
+            aria-label="Thêm vào giỏ hàng"
           >
             <ShoppingCart size={18} />
           </button>

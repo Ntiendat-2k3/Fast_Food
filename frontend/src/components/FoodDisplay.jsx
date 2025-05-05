@@ -15,6 +15,7 @@ const FoodDisplay = ({ category }) => {
       (searchTerm === "" ||
         item.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+  console.log(filteredFoodList)
 
   return (
     <div className="mt-8">
@@ -38,8 +39,7 @@ const FoodDisplay = ({ category }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredFoodList.map((item, index) => (
             <FoodItem
-              key={item._id}
-              id={item._id}
+              key={item.name}
               name={item.name}
               description={item.description}
               price={item.price}

@@ -9,7 +9,6 @@ import Footer from "./components/Footer"
 import LoginPopup from "./components/LoginPopup"
 import Thankyou from "./pages/Thankyou/Thankyou"
 import MyOrders from "./pages/MyOrders/MyOrders"
-import FoodDetail from "./components/FoodDetail"
 import Foods from "./pages/Foods/Foods"
 import ProductDetail from "./pages/ProductDetail/ProductDetail"
 
@@ -29,7 +28,6 @@ const App = () => {
             <Route path="/order" element={<PlaceOrder />} />
             <Route path="/thankyou" element={<Thankyou />} />
             <Route path="/myorders" element={<MyOrders />} />
-            <Route path="/food/:id" element={<FoodDetail />} />
             <Route path="/product/:slug" element={<ProductDetail />} />
           </Routes>
         </main>
