@@ -7,6 +7,7 @@ import FoodItem from "./FoodItem";
 
 const FoodDisplay = ({ category }) => {
   const { food_list } = useContext(StoreContext);
+  console.log(food_list)
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredFoodList = food_list.filter(

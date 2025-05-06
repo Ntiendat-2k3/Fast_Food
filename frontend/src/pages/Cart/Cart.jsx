@@ -12,7 +12,7 @@ const Cart = () => {
   const isCartEmpty = Object.values(cartItems).every((quantity) => quantity === 0)
 
   return (
-    <div className="bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-dark-lighter mt-20 mx-4 md:mx-auto max-w-6xl transition-colors duration-300">
+    <div className="my-8 bg-white dark:bg-dark-card rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-dark-lighter mt-20 mx-4 md:mx-auto max-w-6xl transition-colors duration-300">
       <div className="p-6">
         <h1 className="text-2xl font-bold text-dark dark:text-white mb-6">Giỏ hàng của bạn</h1>
 
