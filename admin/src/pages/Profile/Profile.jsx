@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, GitlabIcon as GitHub, Linkedin } from "lucide-react"
+import { Mail, Phone, MapPin, Github, Linkedin } from "lucide-react"
 
 const Profile = () => {
   const teamMembers = [
@@ -69,26 +69,26 @@ const Profile = () => {
                   <img
                     src={member.avatar || "/placeholder.svg"}
                     alt={member.name}
-                    className="w-24 h-24 rounded-full border-4 border-white dark:border-dark"
+                    className="w-24 h-24 rounded-full border-4 border-white dark:border-dark object-cover"
                   />
                 </div>
                 <div className="mt-14 text-center">
-                  <h3 className="text-lg font-bold text-gray-800 dark:text-white">{member.name}</h3>
-                  <p className="text-primary text-sm font-medium mb-1">{member.role}</p>
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white truncate">{member.name}</h3>
+                  <p className="text-primary text-sm font-medium mb-1 truncate">{member.role}</p>
                   <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">MSSV: {member.studentId}</p>
 
                   <div className="space-y-2 text-sm">
-                    <div className="flex items-center justify-center">
-                      <Mail size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
-                      <span className="text-gray-600 dark:text-gray-300">{member.email}</span>
+                    <div className="flex items-center">
+                      <Mail size={16} className="text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
+                      <span className="text-gray-600 dark:text-gray-300 truncate">{member.email}</span>
                     </div>
-                    <div className="flex items-center justify-center">
-                      <Phone size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
+                    <div className="flex items-center">
+                      <Phone size={16} className="text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
                       <span className="text-gray-600 dark:text-gray-300">{member.phone}</span>
                     </div>
-                    <div className="flex items-center justify-center">
-                      <MapPin size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
-                      <span className="text-gray-600 dark:text-gray-300">{member.address}</span>
+                    <div className="flex items-center">
+                      <MapPin size={16} className="text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0" />
+                      <span className="text-gray-600 dark:text-gray-300 truncate">{member.address}</span>
                     </div>
                   </div>
 
@@ -99,7 +99,7 @@ const Profile = () => {
                       rel="noopener noreferrer"
                       className="p-2 bg-gray-100 dark:bg-dark-lighter rounded-full text-gray-700 dark:text-gray-300 hover:bg-primary hover:text-dark transition-colors"
                     >
-                      <GitHub size={18} />
+                      <Github size={18} />
                     </a>
                     <a
                       href={`https://${member.linkedin}`}

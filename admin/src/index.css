@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+textarea {
+  resize: none;
+}
 
 body {
   font-family: "Poppins", sans-serif;

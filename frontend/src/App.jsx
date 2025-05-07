@@ -11,6 +11,7 @@ import Thankyou from "./pages/Thankyou/Thankyou"
 import MyOrders from "./pages/MyOrders/MyOrders"
 import Foods from "./pages/Foods/Foods"
 import ProductDetail from "./pages/ProductDetail/ProductDetail"
+import Payment from "./pages/Payment/Payment"
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/thankyou" element={<Thankyou />} />
             <Route path="/myorders" element={<MyOrders />} />
             <Route path="/product/:slug" element={<ProductDetail />} />
+            <Route path="/payment/:method/:orderId" element={<Payment />} />
           </Routes>
         </main>
         <Footer />

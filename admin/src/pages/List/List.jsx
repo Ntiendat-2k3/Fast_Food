@@ -3,13 +3,26 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { Search, Trash2, Filter, RefreshCw } from "lucide-react"
+import { Search, Trash2, Filter, RefreshCw, Edit } from "lucide-react"
+import EditFoodModal from "./EditFoodModal"
+import ReactPaginate from "react-paginate"
+import ConfirmModal from "../../components/ConfirmModal"
+import "./pagination.css"
 
 const List = ({ url }) => {
   const [list, setList] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("Tất cả")
   const [loading, setLoading] = useState(true)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [currentFood, setCurrentFood] = useState(null)
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, itemId: null })
+
+  // Pagination states
+  const [pageCount, setPageCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [displayedItems, setDisplayedItems] = useState([])
+  const itemsPerPage = 16
 
   const categories = ["Tất cả", "Burger", "Burito", "Gà", "Hot dog", "Pasta", "Salad", "Sandwich", "Tart"]
 
@@ -36,10 +49,11 @@ const List = ({ url }) => {
         await fetchList(selectedCategory)
         toast.success(response.data.message)
       } else {
-        toast.error("Error removing product")
+        toast.error(response.data.message || "Lỗi khi xóa sản phẩm")
       }
     } catch (error) {
-      toast.error("Error connecting to server")
+      console.error("Error removing product:", error)
+      toast.error(error.response?.data?.message || "Lỗi kết nối đến máy chủ")
     }
   }
 
@@ -47,8 +61,25 @@ const List = ({ url }) => {
     fetchList(selectedCategory)
   }, [selectedCategory])
 
+  useEffect(() => {
+    // Filter items based on search term
+    let filteredItems = list
+    if (searchTerm.trim() !== "") {
+      filteredItems = list.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    }
+
+    // Calculate pagination
+    setPageCount(Math.ceil(filteredItems.length / itemsPerPage))
+
+    // Get current page items
+    const startIndex = currentPage * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    setDisplayedItems(filteredItems.slice(startIndex, endIndex))
+  }, [list, searchTerm, currentPage])
+
   const handleSearch = (e) => {
     e.preventDefault()
+    setCurrentPage(0) // Reset to first page on new search
     if (searchTerm.trim() === "") {
       fetchList(selectedCategory)
     } else {
@@ -60,6 +91,36 @@ const List = ({ url }) => {
   const handleCategoryChange = (category) => {
     setSelectedCategory(category)
     setSearchTerm("")
+    setCurrentPage(0) // Reset to first page on category change
+  }
+
+  const handleEditClick = (food) => {
+    setCurrentFood(food)
+    setEditModalOpen(true)
+  }
+
+  const handleEditSuccess = () => {
+    fetchList(selectedCategory)
+    setEditModalOpen(false)
+    setCurrentFood(null)
+  }
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected)
+  }
+
+  const handleDeleteClick = (foodId) => {
+    setConfirmModal({
+      isOpen: true,
+      itemId: foodId,
+    })
+  }
+
+  const handleConfirmDelete = () => {
+    if (confirmModal.itemId) {
+      removeFood(confirmModal.itemId)
+    }
+    setConfirmModal({ isOpen: false, itemId: null })
   }
 
   return (
@@ -120,40 +181,69 @@ const List = ({ url }) => {
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
-        ) : list.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {list.map((item) => (
-              <div
-                key={item._id}
-                className="bg-white dark:bg-dark rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-gray-100 dark:border-dark-lighter"
-              >
-                <div className="h-48 overflow-hidden">
-                  <img
-                    src={`${url}/images/${item.image}`}
-                    alt={item.name}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-gray-800 dark:text-white text-lg mb-1">{item.name}</h3>
-                  <div className="flex items-center mb-2">
-                    <span className="bg-primary-light text-dark text-xs px-2 py-1 rounded-full">{item.category}</span>
+        ) : displayedItems.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {displayedItems.map((item) => (
+                <div
+                  key={item._id}
+                  className="bg-white dark:bg-dark rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-gray-100 dark:border-dark-lighter"
+                >
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={`${url}/images/${item.image}`}
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
                   </div>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">{item.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-primary">{item.price.toLocaleString("vi-VN")} đ</span>
-                    <button
-                      onClick={() => removeFood(item._id)}
-                      className="p-2 bg-red-100 text-red-500 rounded-full hover:bg-red-200 transition-colors"
-                      title="Xóa sản phẩm"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                  <div className="p-4">
+                    <h3 className="font-bold text-gray-800 dark:text-white text-lg mb-1">{item.name}</h3>
+                    <div className="flex items-center mb-2">
+                      <span className="bg-primary-light text-dark text-xs px-2 py-1 rounded-full">{item.category}</span>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2">{item.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-bold text-primary">{item.price.toLocaleString("vi-VN")} đ</span>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEditClick(item)}
+                          className="p-2 bg-blue-100 text-blue-500 rounded-full hover:bg-blue-200 transition-colors"
+                          title="Sửa sản phẩm"
+                        >
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(item._id)}
+                          className="p-2 bg-red-100 text-red-500 rounded-full hover:bg-red-200 transition-colors"
+                          title="Xóa sản phẩm"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {pageCount > 1 && (
+              <div className="pagination-container mt-8">
+                <ReactPaginate
+                  previousLabel={"←"}
+                  nextLabel={"→"}
+                  pageCount={pageCount}
+                  onPageChange={handlePageChange}
+                  containerClassName={"pagination"}
+                  previousLinkClassName={"pagination__link"}
+                  nextLinkClassName={"pagination__link"}
+                  disabledClassName={"pagination__link--disabled"}
+                  activeClassName={"pagination__link--active"}
+                  forcePage={currentPage}
+                />
               </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12 bg-gray-50 dark:bg-dark-lighter rounded-xl">
             <img
@@ -166,6 +256,25 @@ const List = ({ url }) => {
           </div>
         )}
       </div>
+
+      {/* Edit Food Modal */}
+      {editModalOpen && currentFood && (
+        <EditFoodModal
+          food={currentFood}
+          url={url}
+          onClose={() => setEditModalOpen(false)}
+          onSuccess={handleEditSuccess}
+        />
+      )}
+
+      {/* Confirm Delete Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, itemId: null })}
+        onConfirm={handleConfirmDelete}
+        title="Xác nhận xóa"
+        message="Bạn có chắc chắn muốn xóa sản phẩm này? Hành động này không thể hoàn tác."
+      />
     </div>
   )
 }

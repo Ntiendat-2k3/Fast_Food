@@ -34,7 +34,7 @@ const Add = ({ url }) => {
     }
   }
 
-  // Handle form submission
+  // Update the onSubmitHandler function to better handle errors
   const onSubmitHandler = async (event) => {
     event.preventDefault()
     const formData = new FormData()
@@ -57,10 +57,11 @@ const Add = ({ url }) => {
         setImagePreview(null)
         toast.success(response.data.message)
       } else {
-        toast.error(response.data.message)
+        toast.error(response.data.message || "Lỗi khi thêm sản phẩm")
       }
     } catch (error) {
-      toast.error("Lỗi khi thêm sản phẩm!")
+      console.error("Error adding product:", error)
+      toast.error(error.response?.data?.message || "Lỗi khi thêm sản phẩm. Vui lòng thử lại sau.")
     }
   }
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import axios from "axios"
 import { Package, Clock, Truck, CheckCircle, RefreshCw, Search } from "lucide-react"
+import ConfirmModal from "../../components/ConfirmModal"
 
 const Orders = ({ url }) => {
   const [orders, setOrders] = useState([])
@@ -11,6 +12,13 @@ const Orders = ({ url }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredOrders, setFilteredOrders] = useState([])
   const [statusFilter, setStatusFilter] = useState("Tất cả")
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    orderId: null,
+    newStatus: "",
+    title: "",
+    message: "",
+  })
 
   // Fetch all orders from API
   const fetchAllOrders = async () => {
@@ -21,10 +29,11 @@ const Orders = ({ url }) => {
         setOrders(response.data.data)
         setFilteredOrders(response.data.data)
       } else {
-        toast.error("Error fetching orders")
+        toast.error(response.data.message || "Lỗi khi tải danh sách đơn hàng")
       }
     } catch (error) {
-      toast.error("Error connecting to server")
+      console.error("Error fetching orders:", error)
+      toast.error(error.response?.data?.message || "Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.")
     } finally {
       setLoading(false)
     }
@@ -32,18 +41,43 @@ const Orders = ({ url }) => {
 
   // Update order status
   const statusHandler = async (event, orderId) => {
+    const newStatus = event.target.value
+
+    setConfirmModal({
+      isOpen: true,
+      orderId: orderId,
+      newStatus: newStatus,
+      title: "Xác nhận thay đổi trạng thái",
+      message: `Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng thành "${newStatus}"?`,
+    })
+  }
+
+  const handleConfirmStatusChange = async () => {
     try {
       const response = await axios.post(url + "/api/order/status", {
-        orderId,
-        status: event.target.value,
+        orderId: confirmModal.orderId,
+        status: confirmModal.newStatus,
       })
+
       if (response.data.success) {
         await fetchAllOrders()
         toast.success("Trạng thái đơn hàng đã được cập nhật")
+      } else {
+        toast.error(response.data.message || "Lỗi khi cập nhật trạng thái đơn hàng")
       }
     } catch (error) {
-      toast.error("Error updating order status")
+      console.error("Error updating order status:", error)
+      toast.error(error.response?.data?.message || "Lỗi khi cập nhật trạng thái đơn hàng. Vui lòng thử lại sau.")
     }
+
+    // Close the confirmation modal
+    setConfirmModal({
+      isOpen: false,
+      orderId: null,
+      newStatus: "",
+      title: "",
+      message: "",
+    })
   }
 
   useEffect(() => {
@@ -200,6 +234,23 @@ const Orders = ({ url }) => {
           </div>
         )}
       </div>
+
+      {/* Confirm Status Change Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() =>
+          setConfirmModal({
+            isOpen: false,
+            orderId: null,
+            newStatus: "",
+            title: "",
+            message: "",
+          })
+        }
+        onConfirm={handleConfirmStatusChange}
+        title={confirmModal.title}
+        message={confirmModal.message}
+      />
     </div>
   )
 }
